@@ -34,7 +34,7 @@ void print_matrix(Matrix m, int n)
     }
 }
 
-int compute_southeast_edge(char* X, char* Y, int i, int j)
+int compute_southeast_edge(char *X, char *Y, int i, int j)
 {
     char x = X[i];
     char y = Y[j];
@@ -46,7 +46,7 @@ int compute_southeast_edge(char* X, char* Y, int i, int j)
     else
     {
         return 1;
-    }    
+    }
 }
 
 int dynamic_programming_algorithm(char *X, char *Y)
@@ -69,10 +69,10 @@ int dynamic_programming_algorithm(char *X, char *Y)
     {
         for (int j = 1; j < n; j++)
         {
-            int north = m[i-1][j];
-            int west = m[i][j-1];
-            int northeast = m[i-1][j-1];
-            int southeast_edge = compute_southeast_edge(X, Y, i-1, j-1);
+            int north = m[i - 1][j];
+            int west = m[i][j - 1];
+            int northeast = m[i - 1][j - 1];
+            int southeast_edge = compute_southeast_edge(X, Y, i - 1, j - 1);
             // printf("%d%d ", up, left);
             if (northeast <= west && northeast <= north)
             {
@@ -88,42 +88,98 @@ int dynamic_programming_algorithm(char *X, char *Y)
             {
                 // el valor mínimo está al oeste
                 m[i][j] = west + 1;
-                
             }
-            
+
             // printf("%d ", southeast_edge);
-            
         }
         // printf("\n");
     }
     // printf("\n");
     // imprimir la matriz
     // print_matrix(m, n);
-    return m[n-1][n-1];
+    return m[n - 1][n - 1];
 }
+
+int compute_cell(int northeast, int west, int north, int southeast_edge)
+{
+    int result;
+    if (northeast <= west && northeast <= north)
+    {
+        // el valor mínimo está al noreste
+        result = northeast + southeast_edge;
+    }
+    else if (north < west && north < northeast)
+    {
+        // el valor mínimo está al norte
+        result = north + 1;
+    }
+    else
+    {
+        // el valor mínimo está al oeste
+        result = west + 1;
+    }
+    return result;
+}
+
 int in_cache_algorithm(char *X, char *Y)
 {
     int n = strlen(X) + 1;
     Vector row = create_vector(n);
     Vector column = create_vector(n);
+    int last_west;
+    int last_northeast;
+    int last_north;
     for (int i = 0; i < n; i++)
     {
         row[i] = i;
         column[i] = i;
         // printf("%d %d\n", row[i], column[i]);
     }
-    Vector current_row = create_vector(n-1);
-    for (int i = 0; i < n-1; i++)
+
+    for (int k = 1; k < n; k++)
     {
-        
+        for (int i = k; i < n; i++)
+        {
+            if (i == k)
+            {
+                last_west = column[k];
+                last_northeast = row[k-1];
+            }
+            int west = last_west;
+            int northeast = last_northeast;
+            int north = row[i];
+            int southeast_edge = compute_southeast_edge(X, Y, k-1, i-1);
+            int cell = compute_cell(northeast, west, north, southeast_edge);
+            // printf("[%d, %d] = %d\n", k, i, northeast, north, last_west, cell);
+            last_west = cell;
+            last_northeast = row[i];
+            row[i] = cell;
+        }
+        for (int j = k + 1; j < n; j++)
+        {
+            if (j - k == 1)
+            {
+                last_north = row[k];
+                last_northeast = column[j-1];
+            }
+            int north = last_north;
+            int northeast = last_northeast;
+            int west = column[j];
+            int southeast_edge = compute_southeast_edge(X, Y, j-1, k-1);
+            int cell = compute_cell(northeast, west, north, southeast_edge);
+            // printf("[%d, %d] = %d\n", j, k, cell);
+            last_north = cell;
+            last_northeast = column[j];
+            column[j] = cell;
+        }
     }
-    return 1;
+    return row[n-1];
 }
 void main()
 {
     char S[] = "banana";
-    char T[] = "ananas";
-    int edit_distance = dynamic_programming_algorithm(&S, &T);
-    // int edit_distance = in_cache_algorithm(&S, &T);
-    printf("%d\n",edit_distance);
+    char T[] = "ananes";
+    // int edit_distance = dynamic_programming_algorithm(&S, &T);
+    int edit_distance = in_cache_algorithm(&S, &T);
+    printf("%d\n", edit_distance);
 }
