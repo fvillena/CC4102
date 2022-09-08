@@ -1,5 +1,6 @@
 #!/bin/bash
 algorithm=$1
+echo "string_length,distance,elapsed_time,X,Y"
 for n in {3..15}
 do
     for i in {1..50}
@@ -11,6 +12,6 @@ do
         distance=$(./measure $algorithm $X $Y)
         tf=$(date +%s%N)
         elapsed_time=$((($tf - $ti)/1000000))
-        echo $string_length $distance $elapsed_time
+        echo $string_length","$distance","$elapsed_time","$X","$Y
     done
 done
