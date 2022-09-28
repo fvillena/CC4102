@@ -3,7 +3,8 @@ experiment: measure
 	./experiment.sh 2 > algorithm_2_results.csv
 
 test: measure
-	./test.sh
+	./test.sh 1
+	./test.sh 2
 
 measure: measure.c
 	gcc -O3 measure.c -o measure

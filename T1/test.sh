@@ -15,5 +15,5 @@ test () {
 }
 while IFS=" " read -r X Y true_distance
 do
-   echo "$(test 1 $X $Y $true_distance) $(test 2 $X $Y $true_distance)"
+   echo "$(test $1 $X $Y $true_distance)"
 done < test_cases.txt
