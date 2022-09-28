@@ -40,7 +40,7 @@ unsigned short compute_southeast_edge(char *X, char *Y, unsigned short i,
   }
 }
 
-unsigned short dynamic_programming_algorithm(char *X, char *Y) {
+unsigned short algorithm_1(char *X, char *Y) {
   unsigned short n = strlen(X) + 1;
   // construir la matriz
   Matrix m = create_matrix(n);
@@ -99,7 +99,7 @@ unsigned short compute_cell(unsigned short northeast, unsigned short west,
   return result;
 }
 
-unsigned short in_cache_algorithm(char *X, char *Y) {
+unsigned short algorithm_2(char *X, char *Y) {
   unsigned short n = strlen(X) + 1;
   Vector row = create_vector(n);
   Vector column = create_vector(n);
@@ -150,11 +150,3 @@ unsigned short in_cache_algorithm(char *X, char *Y) {
   }
   return row[n - 1];
 }
-// void main()
-// {
-//     char S[] = "banana";
-//     char T[] = "ananes";
-//     // unsigned short edit_distance = dynamic_programming_algorithm(&S, &T);
-//     unsigned short edit_distance = in_cache_algorithm(&S, &T);
-//     printf("%d\n", edit_distance);
-// }

@@ -12,11 +12,11 @@ int main(int argc, char *argv[])
     start = clock();
     if (algorithm == 1)
     {
-        result = dynamic_programming_algorithm(X, Y);
+        result = algorithm_1(X, Y);
     }
     else if (algorithm == 2)
     {
-        result = in_cache_algorithm(X, Y);
+        result = algorithm_2(X, Y);
     }
     else
     {
