@@ -1,4 +1,5 @@
 #include "edit-distance.h"
+#include <time.h>
 
 int main(int argc, char *argv[])
 {
@@ -6,6 +7,9 @@ int main(int argc, char *argv[])
     char *X = argv[2];
     char *Y = argv[3];
     int result;
+    unsigned long micros = 0;
+    clock_t start, end;
+    start = clock();
     if (algorithm == 1)
     {
         result = dynamic_programming_algorithm(X, Y);
@@ -18,6 +22,8 @@ int main(int argc, char *argv[])
     {
         result = 0;
     }
-    printf("%d\n",result);
+    end = clock();
+    micros = end - start;
+    printf("%d %d\n",result, micros);
     return 0;
 }
