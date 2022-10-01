@@ -1,19 +1,21 @@
 #!/bin/bash
-test () {
+while IFS=" " read -r X Y true_distance
+do
     algorithm=$1
-    X=$2
-    Y=$3
-    true_distance=$4
-    result=$(./measure $algorithm $X $Y)
+    if (( $algorithm == 3 ))
+    then
+        l=${#X}
+        x=$(($l+1))
+        result=$(./measure $algorithm $x $X $Y)
+    else
+        result=$(./measure $algorithm $X $Y)
+    fi
     result_splitted=(${result// / })
     distance=${result_splitted[0]}
     if [ $((distance)) = $((true_distance)) ]; then
-        echo -n "OK"
+        echo -n "."
     else
-        echo -n "FAIL"
+        echo -n "F"
     fi
-}
-while IFS=" " read -r X Y true_distance
-do
-   echo "$(test $1 $X $Y $true_distance)"
 done < test_cases.txt
+echo ""
