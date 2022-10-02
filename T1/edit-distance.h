@@ -2,16 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef min
-#define min(a, b) ((a < b) ? a : b)
-#endif
-
-#ifndef max
-#define max(a, b) ((a > b) ? a : b)
-#endif
-
+// estructura para definir una matriz en el heap
 typedef unsigned short **Matrix;
-
 Matrix create_matrix(unsigned short n)
 {
   unsigned short **rows = malloc(n * sizeof(unsigned short *));
@@ -22,32 +14,20 @@ Matrix create_matrix(unsigned short n)
   return rows;
 }
 
+// estructura para definir un vector en el heap
 typedef unsigned short *Vector;
-
 Vector create_vector(unsigned short n)
 {
   unsigned short *vector = malloc(n * sizeof(unsigned short *));
   return vector;
 }
 
-void print_matrix(Matrix m, unsigned short n)
-{
-  for (unsigned short i = 0; i < n; i++)
-  {
-    for (unsigned short j = 0; j < n; j++)
-    {
-      printf("%d ", m[i][j]);
-    }
-    printf("\n");
-  }
-}
-
+// cálculo de la arista sureste
 unsigned short compute_southeast_edge(char *X, char *Y, unsigned short i,
                                       unsigned short j)
 {
   char x = X[i];
   char y = Y[j];
-  // printf("%c%c ", x, y);
   if (x == y)
   {
     return 0;
@@ -58,6 +38,31 @@ unsigned short compute_southeast_edge(char *X, char *Y, unsigned short i,
   }
 }
 
+// calcular el valor de la celda
+unsigned short compute_cell(unsigned short northeast, unsigned short west,
+                            unsigned short north,
+                            unsigned short southeast_edge)
+{
+  unsigned short result;
+  if (northeast <= west && northeast <= north)
+  {
+    // el valor mínimo está al noreste
+    result = northeast + southeast_edge;
+  }
+  else if (north < west && north < northeast)
+  {
+    // el valor mínimo está al norte
+    result = north + 1;
+  }
+  else
+  {
+    // el valor mínimo está al oeste
+    result = west + 1;
+  }
+  return result;
+}
+
+// algoritmo 1
 unsigned short algorithm_1(char *X, char *Y)
 {
   unsigned short n = strlen(X) + 1;
@@ -83,61 +88,19 @@ unsigned short algorithm_1(char *X, char *Y)
       unsigned short northeast = m[i - 1][j - 1];
       unsigned short southeast_edge =
           compute_southeast_edge(X, Y, i - 1, j - 1);
-      // printf("%d%d ", up, left);
-      if (northeast <= west && northeast <= north)
-      {
-        // el valor mínimo está al noreste
-        m[i][j] = northeast + southeast_edge;
-      }
-      else if (north < west && north < northeast)
-      {
-        // el valor mínimo está al norte
-        m[i][j] = north + 1;
-      }
-      else
-      {
-        // el valor mínimo está al oeste
-        m[i][j] = west + 1;
-      }
-
-      // printf("%d ", southeast_edge);
+      m[i][j] = compute_cell(northeast, west, north, southeast_edge);
     }
-    // printf("\n");
   }
-  // printf("\n");
-  // imprimir la matriz
-  // print_matrix(m, n);
   return m[n - 1][n - 1];
 }
 
-unsigned short compute_cell(unsigned short northeast, unsigned short west,
-                            unsigned short north,
-                            unsigned short southeast_edge)
-{
-  unsigned short result;
-  if (northeast <= west && northeast <= north)
-  {
-    // el valor mínimo está al noreste
-    result = northeast + southeast_edge;
-  }
-  else if (north < west && north < northeast)
-  {
-    // el valor mínimo está al norte
-    result = north + 1;
-  }
-  else
-  {
-    // el valor mínimo está al oeste
-    result = west + 1;
-  }
-  return result;
-}
-
+// algoritmo 2
 unsigned short algorithm_2(char *X, char *Y)
 {
+  // se definen las variables en el stack
   unsigned short n = strlen(X) + 1;
-  unsigned short row[n];
-  unsigned short column[n];
+  unsigned short row[n]; // fila en el stack
+  unsigned short column[n]; // columna en el stack
   unsigned short last_west;
   unsigned short last_northeast;
   unsigned short last_north;
@@ -145,9 +108,9 @@ unsigned short algorithm_2(char *X, char *Y)
   {
     row[i] = i;
     column[i] = i;
-    // printf("%d %d\n", row[i], column[i]);
   }
 
+  // se itera en diagonal por la matriz
   for (unsigned short k = 1; k < n; k++)
   {
     for (unsigned short i = k; i < n; i++)
@@ -164,7 +127,6 @@ unsigned short algorithm_2(char *X, char *Y)
           compute_southeast_edge(X, Y, k - 1, i - 1);
       unsigned short cell =
           compute_cell(northeast, west, north, southeast_edge);
-      // printf("[%d, %d] = %d\n", k, i, northeast, north, last_west, cell);
       last_west = cell;
       last_northeast = row[i];
       row[i] = cell;
@@ -183,7 +145,6 @@ unsigned short algorithm_2(char *X, char *Y)
           compute_southeast_edge(X, Y, j - 1, k - 1);
       unsigned short cell =
           compute_cell(northeast, west, north, southeast_edge);
-      // printf("[%d, %d] = %d\n", j, k, cell);
       last_north = cell;
       last_northeast = column[j];
       column[j] = cell;
@@ -192,76 +153,9 @@ unsigned short algorithm_2(char *X, char *Y)
   return row[n - 1];
 }
 
-unsigned short algorithm_1_mod(char *p1, char *p2)
-{
-  // unsigned short n = p1.length();
-  unsigned short n = strlen(p1);
-
-  unsigned short filas = n + 1;
-  unsigned short columnas = n + 1;
-  unsigned short **matriz;
-
-  // Reservar de Memoria
-  matriz = (unsigned short **)malloc(filas * sizeof(unsigned short *));
-
-  for (unsigned short i = 0; i < filas; i++)
-    matriz[i] = (unsigned short *)malloc(columnas * sizeof(unsigned short));
-
-  unsigned short costo = 0;
-  unsigned short norte, oeste, noroeste;
-
-  // pedir memoria en el heap
-  // unsigned short matriz[n+1][n+1];
-
-  // llenar fila 0
-  for (unsigned short i = 0; i <= n; i++)
-  {
-    matriz[0][i] = i;
-  }
-
-  // llenar columna 0
-  for (unsigned short j = 0; j <= n; j++)
-  {
-    matriz[j][0] = j;
-  }
-
-  // construir la matriz a partir de comparar valores
-  for (unsigned short i = 1; i <= n; i++)
-  {
-    for (unsigned short j = 1; j <= n; j++)
-    {
-      oeste = matriz[i - 1][j];
-      norte = matriz[i][j - 1];
-      noroeste = matriz[i - 1][j - 1];
-      if (p1[i - 1] == p2[j - 1])
-      {
-        costo = 0;
-      }
-      else
-      {
-        costo = 1;
-      }
-      matriz[i][j] = min(min(oeste + 1,
-                             norte + 1),
-                         noroeste + costo);
-    }
-  }
-
-  // imprimir la matriz
-  // for (unsigned short i = 0; i <= n; i++){
-  //     for (unsigned short j = 0; j <= n; j++){
-  //         cout << matriz[i][j] << "  ";
-  //     }
-  //     cout << "\n";
-  // }
-
-  // retornar valor de con la distancia de edicion
-  return matriz[n][n];
-}
-
+// algoritmo 3
 unsigned short algorithm_3(char *p1, char *p2, unsigned short memoria)
 {
-  // unsigned short n = p1.length();
   unsigned short n = strlen(p1);
   unsigned short norte, oeste, noroeste;
   unsigned short costo = 0;
@@ -269,16 +163,11 @@ unsigned short algorithm_3(char *p1, char *p2, unsigned short memoria)
   unsigned short m = memoria; // valor del largo y ancho de la submatriz
   unsigned short trozos = n / (m - 1);
 
-  // Se crea la matriz en memoria
-  // unsigned short matriz[m][m];
+  // Se crea la matriz en el heap
   Matrix matriz = create_matrix(m);
-  // unsigned short frontera_norte[n + 1];
   Vector frontera_norte = create_vector(n + 1);
-  // unsigned short frontera_oeste[n + 1];
   Vector frontera_oeste = create_vector(n + 1);
-  // unsigned short aux_norte[m];
   Vector aux_norte = create_vector(m);
-  // unsigned short aux_norte[m];
   Vector aux_oeste = create_vector(m);
 
   // llenar frontera norte
@@ -348,28 +237,9 @@ unsigned short algorithm_3(char *p1, char *p2, unsigned short memoria)
           {
             costo = 1;
           }
-
-          matriz[i][j] = min(min(oeste + 1,
-                                 norte + 1),
-                             noroeste + costo);
+          matriz[i][j] = compute_cell(noroeste, oeste, norte, costo);
         }
       }
-
-      // imprimir la matriz
-      // cout << "\n";
-      // cout << "sub-matriz " << f <<"," << c;
-      // cout << "\n";
-      // cout << "\n";
-
-      // for (unsigned short i = 0; i < m; i++){
-      //     for (unsigned short j = 0; j < m; j++){
-      //         cout << matriz[i][j] << "  ";
-
-      //     }
-      //     cout << "\n";
-
-      // }
-      // cout << "\n";
 
       // se llenan los valores auxiliares para utilizar después
       // llenar aux norte
@@ -387,26 +257,18 @@ unsigned short algorithm_3(char *p1, char *p2, unsigned short memoria)
       if (c == trozos - 1)
       {
         // llenar fila 0
-        //  cout << "\n";
-
         for (unsigned short i = 0; i < m; i++)
         {
           matriz[0][i] = frontera_norte[i]; // i+((c+1)*m)-1
-          // cout << matriz[0][i];
         }
-        // cout << "\n";
       }
       else
       {
         // llenar fila 0
-        //  cout << "\n";
-
         for (unsigned short i = 0; i < m; i++)
         {
           matriz[0][i] = frontera_norte[i + ((c + 1) * (m - 1))];
-          // cout << matriz[0][i];
         }
-        // cout << "\n";
       }
 
       // llenar frontera norte
@@ -420,15 +282,11 @@ unsigned short algorithm_3(char *p1, char *p2, unsigned short memoria)
       }
 
       // llenar columna 0
-      // cout << "\n";
-
       for (unsigned short i = 0; i < m; i++)
       {
         matriz[i][0] = aux_oeste[i];
-        // cout << matriz[i][0];
       }
-      // cout << "\n";
-
+      
       // llenar frontera norte
       for (unsigned short i = 0; i < m; i++)
       {
@@ -446,20 +304,6 @@ unsigned short algorithm_3(char *p1, char *p2, unsigned short memoria)
           aux_oeste[i] = frontera_oeste[i + f * m - 1];
         }
       }
-
-      // cout << "frontera norte: ";
-      // for (unsigned short i = 0; i < n+1; i++){
-      //     cout <<  frontera_norte[i] << "  ";
-      // }
-      // cout << "\n";
-
-      // cout << "frontera oeste: ";
-      // for (unsigned short i = 0; i < n+1; i++){
-      //     cout << frontera_oeste[i] << "  ";
-      // }
-      // cout << "\n";
-      // cout << "\n";
-      // cout << "\n";
     }
   }
 
