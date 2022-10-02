@@ -15,7 +15,7 @@ do
         Y=$(cat /dev/urandom | tr -dc '[:alpha:]' | fold -w $string_length | head -n 1)
         if (( $algorithm == 3 ))
         then
-            for s in 0 1 2 3 4 5 9 13
+            for s in 0 1 2 3 4 5 9 10 12 13
             do
                 size=$((2**$s))
                 if (($string_length % $size == 0))
