@@ -1,7 +1,5 @@
 # Tarea 1 - Memoria cache y RAM
 
-## Código de los experimentos
-
 Para poder reproducir nuestros experimentos en Linux basta con ejecutar
 
 ```
