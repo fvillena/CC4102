@@ -34,10 +34,7 @@ pair<int, vector<array<int, 3>>> parse_g(string g) {
 pair<int, vector<array<int, 3>>> make_random_graph(int vertices, int edges_n) {
   srand (time(NULL));
   vector<array<int, 3>> edges;
-  for (int i = 0; i < vertices-1; i++) {
-    edges.push_back({i, i+1, 1});
-  }
-  for (int i = vertices; i < edges_n; i++) {
+  for (int i = 0; i < edges_n; i++) {
     edges.push_back({rand() % vertices, rand() % vertices, 1});
   }
   return make_pair(vertices, edges);
