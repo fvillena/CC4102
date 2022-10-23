@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <random>
 
 using namespace std;
 
@@ -34,8 +35,14 @@ pair<int, vector<array<int, 3>>> parse_g(string g) {
 pair<int, vector<array<int, 3>>> make_random_graph(int vertices, int edges_n) {
   srand (time(NULL));
   vector<array<int, 3>> edges;
+  random_device rd;
+  mt19937 gen(rd());
+  uniform_int_distribution<> distr(0, vertices-1);
   for (int i = 0; i < edges_n; i++) {
-    edges.push_back({rand() % vertices, rand() % vertices, 1});
+    int u = distr(gen);
+    int v = distr(gen);
+    edges.push_back({u, v, 1});
+    // cout << u << "\n";
   }
   return make_pair(vertices, edges);
 }
