@@ -31,7 +31,14 @@ vector<int> dijkstra_1(int n, vector<array<int,3>> edges) {
 
     for (int i = 0; i < cant_vecinos; i++) {
       int u = grafo[index_nodo][i].first;
-      int v_u_dist = grafo[index_nodo][i].second + distancias[index_nodo];
+      int v_u_dist;
+      if (distancias[index_nodo] != INT_MAX)
+      {
+        v_u_dist = grafo[index_nodo][i].second + distancias[index_nodo];
+      } else
+      {
+        v_u_dist = INT_MAX;
+      }
       if (v_u_dist < distancias[u]) {
         distancias[u] = v_u_dist;
         previos[u] = index_nodo;
