@@ -9,7 +9,6 @@ using namespace std;
 
 void addEdge(vector<pair<int, int>> adj[], int u, int v, int w) {
   adj[u].push_back(make_pair(v, w));
-  adj[v].push_back(make_pair(u, w));
 }
 
 pair<int, int> get_min(vector<int> arreglo, vector<int> auxiliar) {
