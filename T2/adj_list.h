@@ -12,15 +12,15 @@ void addEdge(vector<pair<int, int>> adj[], int u, int v, int w) {
   adj[v].push_back(make_pair(u, w));
 }
 
-pair <int,int> get_min(vector <int> arreglo){
+pair <int,int> get_min(vector <int> arreglo, vector <int> auxiliar){
 
     int tamanho=arreglo.size();
     int minimo= INT_MAX;//INT64_MAX;
     int indice=0;
-    for(int i=0;i<tamanho;i++){
-        if(arreglo[i]<minimo){
-            minimo=arreglo[i];
-            indice=i;
+    for(int i=0;i<auxiliar.size();i++){
+        if(arreglo[auxiliar[i]]<=minimo){
+            minimo=arreglo[auxiliar[i]];
+            indice=auxiliar[i];
 
         }
     }
