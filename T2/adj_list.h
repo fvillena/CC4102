@@ -11,6 +11,10 @@ void addEdge(vector<pair<int, int>> adj[], int u, int v, int w) {
   adj[u].push_back(make_pair(v, w));
 }
 
+void addEdge_2(vector<pair<int, int>> adj[], int u, int v, int w) {
+  adj[u].push_back(make_pair(w, v));
+}
+
 pair<int, int> get_min(vector<int> arreglo, vector<int> auxiliar) {
   int tamanho = arreglo.size();
   int minimo = INT_MAX;  // INT64_MAX;
@@ -30,6 +34,20 @@ vector<vector<pair<int, int>>> make_adj_list(int n,
   vector<pair<int, int>> adj[vertices_n];
   for (array<int, 3> edge : edges) {
     addEdge(adj, edge[0], edge[1], edge[2]);
+  }
+  vector<vector<pair<int, int>>> v;
+  for (int i = 0; i < vertices_n; i++) {
+    v.push_back(adj[i]);
+  }
+  return v;
+}
+
+vector<vector<pair<int, int>>> make_adj_list_2(int n,
+                                             vector<array<int, 3>> edges) {
+  const int vertices_n = n;
+  vector<pair<int, int>> adj[vertices_n];
+  for (array<int, 3> edge : edges) {
+    addEdge_2(adj, edge[0], edge[1], edge[2]);
   }
   vector<vector<pair<int, int>>> v;
   for (int i = 0; i < vertices_n; i++) {
