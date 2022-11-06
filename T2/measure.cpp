@@ -26,7 +26,11 @@ int main(int argc, char *argv[]) {
   start = clock();
   if (algorithm == 1) {
     distances = dijkstra_1(graph.first, graph.second);
+  } else if (algorithm == 2)
+  {
+    distances = dijkstra_2(graph.first, graph.second);
   }
+  
   end = clock();
   micros = end - start;
   cout << micros << "\t";
