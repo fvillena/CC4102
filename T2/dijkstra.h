@@ -8,7 +8,7 @@
 
 using namespace std;
 
-vector<int> dijkstra_1(int n, vector<array<int,3>> edges) {
+vector<int> dijkstra_1(int n, vector<array<int, 3>> edges) {
   vector<vector<pair<int, int>>> grafo = make_adj_list(n, edges);
   int maximo_entero = INT_MAX;
   vector<int> distancias(n);
