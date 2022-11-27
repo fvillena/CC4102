@@ -4,7 +4,7 @@ echo "n,c,elapsed_time"
 for n_i in {16..26}
 do
     n=$((2**$n_i))
-    for c_i in {1..10}
+    for c_i in {1..20}
     do
         c=$((1+2*$c_i))
         for i in {0..10}
