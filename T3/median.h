@@ -3,7 +3,7 @@
        __typeof__ (b) _b = (b); \
      _a > _b ? _b : _a; })
 
-void insertion_sort(int *a, int n) 
+void insertion_sort(unsigned long *a, int n) 
 // Insertion sort array a of length n
 {
   for(int j = 1; j < n; j++) {
@@ -19,7 +19,7 @@ void insertion_sort(int *a, int n)
 }
 
 
-int partition(int *a, int n, int x)
+int partition(unsigned long *a, int n, int x)
 // Partition array a of length n around x;
 // Return the number of elements to the left of the pivot.
 {
@@ -48,7 +48,7 @@ int partition(int *a, int n, int x)
   return i;
 }
 
-int algorithm_1(int *a, int n, int i, int c)
+unsigned long algorithm_1(unsigned long *a, int n, int i, int c)
 // Select the ith element (indexed from 0) from the array of length n
 // using the median of medians algorithm
 // https://en.wikipedia.org/wiki/Median_of_medians
@@ -67,7 +67,7 @@ int algorithm_1(int *a, int n, int i, int c)
 	n_meds++;
   }
 
-  int median_of_medians;
+  unsigned long median_of_medians;
   if(n_meds > 1) {
     median_of_medians = algorithm_1(a, n_meds/2, n_meds, c);
   }

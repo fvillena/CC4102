@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
   int n = atoi(argv[2]);
   int k = n / 2;
   int c = atoi(argv[3]);
-  int *A = (int*) malloc(n * sizeof(int));
+  unsigned long *A = (unsigned long*) malloc(n * sizeof(unsigned long));
   if (strcmp(argv[4], "random") == 0) {
     for (int i = 0; i < n; i++){
       A[i] = rand();
@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
       A[i] = atoi(argv[i + 4]);
     }
   }
-  int result;
+  unsigned long result;
   unsigned long micros = 0;
   clock_t start, end;
   start = clock();
