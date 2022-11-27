@@ -1,3 +1,5 @@
+// códigos modificados desde https://github.com/jjh42/algo/blob/master/median.c
+
 #define min(a,b) \
    ({ __typeof__ (a) _a = (a); \
        __typeof__ (b) _b = (b); \
