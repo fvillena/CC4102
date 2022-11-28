@@ -10,7 +10,6 @@
 int main(int argc, char *argv[]) {
   int algorithm = atoi(argv[1]);
   int n = atoi(argv[2]);
-  int k = n / 2;  // mediana
   int c = atoi(argv[3]);
   unsigned long *A = (unsigned long *)malloc(n * sizeof(unsigned long));
   srand((unsigned)time(NULL));
@@ -23,6 +22,7 @@ int main(int argc, char *argv[]) {
       A[i] = atoi(argv[i + 4]);
     }
   }
+  int k = n / 2;  // mediana
   unsigned long result;
   unsigned long micros = 0;
   clock_t start, end;
@@ -33,10 +33,12 @@ int main(int argc, char *argv[]) {
     micros = end - start;
     printf("%d %d\n", result, micros);
   } else if (algorithm == 2) {
-    // start = clock();
-    // result = algorithm_2(A, 0, n, k, c);
+    start = clock();
+    result = algorithm_2(A, 0, n, k, c);
+    end = clock();
+    micros = end - start;
+    printf("%d %d\n", result, micros);
   } else if (algorithm == 3) {
-    unsigned long result_true;
     std::vector<unsigned long> V;
     for (int i = 0; i < n; i++) {
       V.push_back(A[i]);
@@ -45,8 +47,7 @@ int main(int argc, char *argv[]) {
     result = algorithm_3(c, V);
     end = clock();
     micros = end - start;
-    result_true = algorithm_1(A, n, k, 5);
-    printf("%d %d %d\n", result, result_true, micros);
+    printf("%d %d\n", result, micros);
   } else {
     result = -1;
   }
