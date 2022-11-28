@@ -5,11 +5,11 @@ experiment: measure
 
 test: measure
 	./test.sh 1
-	# ./test.sh 2
+	./test.sh 2
 	# ./test.sh 3
 
-measure: measure.c *.h
-	gcc -O3 measure.c -o measure
+measure: measure.cpp *.hpp
+	g++ -O3 measure.cpp -o measure
 
 clean:
 	rm -f measure *.csv
