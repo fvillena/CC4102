@@ -1,3 +1,7 @@
+#include <math.h>
+#include <algorithm>
+using namespace std;
+
 // códigos modificados desde https://github.com/jjh42/algo/blob/master/median.c
 
 #define min(a,b) \
@@ -88,4 +92,33 @@ unsigned long algorithm_1(unsigned long *a, int n, int i, int c)
   else {
 	return algorithm_1(a + k, i - k, n - k, c);
   }
+}
+
+int c_Calculator(double error, double tolerancia){
+    int c = 7*(4/pow(tolerancia, 2))*log(2/error); // Tamaño arreglo auxiliar en funcion del error y tolerancia
+    return c;
+}
+
+template<typename T>
+unsigned long algorithm_3(int c, vector<T> &A){
+
+    unsigned long Aux[c];                  // Arreglo auxilaiar
+
+    unsigned long num;
+    srand(time(NULL));
+    
+
+    unsigned long fin = A.size();
+    
+    for(int j = 0; j<c; j++){
+        num = rand() % fin;
+        Aux[j] = A[num];
+        A[num] = A[fin];
+        fin--;
+    }
+
+
+    sort(Aux, Aux + c);
+
+    return Aux[(c/2)]; 
 }
