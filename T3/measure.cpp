@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "median.hpp"
-// #include "median2.hpp"
 
 int main(int argc, char *argv[]) {
   int algorithm = atoi(argv[1]);
